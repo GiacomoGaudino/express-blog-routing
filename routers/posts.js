@@ -132,16 +132,16 @@ router.patch('/:id', (req, res) => {
 router.delete('/:id', (req, res) => {
     const id = parseInt(req.params.id)
     const postsLenght = posts.length
-    const newPosts = posts.filter(item => item.id !== id)
+    posts = posts.filter(item => item.id !== id)
 
-    if (newPosts.length === postsLenght) {
+    if (posts.length === postsLenght) {
         return res.status(404).json({
             error: true,
             message: 'Post not found'
         })
     }
 
-    res.send(newPosts)
+    res.send(posts)
 })
 
 
