@@ -105,7 +105,27 @@ router.put('/:id', (req, res) => {
 //modify
 router.patch('/:id', (req, res) => {
     const { id } = req.params
-    res.send(`Partial update of the post with ID: ${id}`)
+    const keyChanger = (post, value, keyName) => {
+        if (value !== undefined) {
+            post[keyName] = value
+        }
+    }
+    let post = posts.find(item => item.id === parseInt(id))
+    let { titolo, contenuto, immagine, tags } = req.body
+
+    if (!post) {
+        return res.status(404).json(
+            {
+                error: true,
+                message: 'Post not found'
+            })
+    }
+    keyChanger(post, titolo, 'titolo')
+    keyChanger(post, contenuto, 'contenuto')
+    keyChanger(post, immagine, 'immagine')
+    keyChanger(post, tags, 'tags')
+
+    res.json(post)
 })
 
 //destroy
