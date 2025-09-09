@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+router.use(express.json())
 
 const posts = [
     {
@@ -68,7 +69,16 @@ router.get('/:id', (req, res) => {
 
 //create
 router.post('/', (req, res) => {
-    res.send('Create a new post')
+    const { titolo, contenuto, immagine, tags } = req.body
+    const newPost = {
+        id: posts.length + 1,
+        titolo: titolo,
+        contenuto: contenuto,
+        immagine: immagine,
+        tags: tags
+    }
+    posts.push(newPost)
+    res.send(posts)
 })
 
 //update

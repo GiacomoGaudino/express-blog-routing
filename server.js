@@ -10,3 +10,5 @@ app.listen(PORT, () => {
 })
 
 app.use('/', postRouter)
+
+app.use(express.json())
