@@ -84,7 +84,22 @@ router.post('/', (req, res) => {
 //update
 router.put('/:id', (req, res) => {
     const { id } = req.params
-    res.send(`Update the entire post with ID: ${id}`)
+    let post = posts.find(item => item.id === parseInt(id))
+    let { titolo, contenuto, immagine, tags } = req.body
+
+    if (!post) {
+        return res.status(404).json(
+            {
+                error: true,
+                message: 'Post not found'
+            })
+    }
+    post.contenuto = contenuto
+    post.titolo = titolo
+    post.immagine = immagine
+    post.tags = tags
+
+    res.json(post)
 })
 
 //modify
