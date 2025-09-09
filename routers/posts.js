@@ -85,7 +85,7 @@ router.post('/', (req, res) => {
 router.put('/:id', (req, res) => {
     const { id } = req.params
     let post = posts.find(item => item.id === parseInt(id))
-    let { titolo, contenuto, immagine, tags } = req.body
+    let { titolo, contenuto, immagine, tags } = req.body || {}
 
     if (!post) {
         return res.status(404).json(
@@ -111,7 +111,7 @@ router.patch('/:id', (req, res) => {
         }
     }
     let post = posts.find(item => item.id === parseInt(id))
-    let { titolo, contenuto, immagine, tags } = req.body
+    let { titolo, contenuto, immagine, tags } = req.body || {}
 
     if (!post) {
         return res.status(404).json(
