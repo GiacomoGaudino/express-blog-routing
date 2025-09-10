@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 
-const posts = [
+let posts = [
     {
         id: 1,
         titolo: 'Ciambellone',
@@ -71,7 +71,7 @@ router.get('/:id', (req, res) => {
 router.post('/', (req, res) => {
     const { titolo, contenuto, immagine, tags } = req.body
     const newPost = {
-        id: posts.length + 1,
+        id: Math.max(...posts.map(post => post.id)) + 1,
         titolo: titolo,
         contenuto: contenuto,
         immagine: immagine,
