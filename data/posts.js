@@ -1,5 +1,3 @@
-const express = require('express')
-const allPost = express.Router()
 
 let posts = [
     {
