@@ -1,45 +1,6 @@
 const express = require('express')
 const router = express.Router()
-
-
-let posts = [
-    {
-        id: 1,
-        titolo: 'Ciambellone',
-        contenuto: 'Un classico dolce da colazione soffice e profumato. Perfetto da gustare con un cappuccino o una tazza di tè.',
-        immagine: '/images/ciambellone.jpeg',
-        tags: ['dolce', 'colazione', 'ciambellone']
-    },
-    {
-        id: 2,
-        titolo: 'Cracker alla barbabietola',
-        contenuto: 'Cracker croccanti e colorati a base di barbabietola, ideali come snack salutare o per accompagnare hummus e formaggi.',
-        immagine: '/images/cracker_barbabietola.jpeg',
-        tags: ['snack', 'barbabietola', 'salutare']
-    },
-    {
-        id: 3,
-        titolo: 'Pane fritto dolce',
-        contenuto: 'Delizioso pane dolce fritto, morbido dentro e dorato fuori, da servire con miele, marmellata o zucchero a velo.',
-        immagine: '/images/pane_fritto_dolce.jpeg',
-        tags: ['dolce', 'pane', 'fritto']
-    },
-    {
-        id: 4,
-        titolo: 'Pasta con barbabietola',
-        contenuto: 'Pasta cremosa con barbabietola, ricotta e noci: un piatto elegante e sano, dal colore vivace e dal sapore delicato.',
-        immagine: '/images/pasta_barbabietola.jpeg',
-        tags: ['pasta', 'barbabietola', 'vegetariano']
-    },
-    {
-        id: 5,
-        titolo: 'Torta paesana',
-        contenuto: 'Torta rustica tipica della tradizione, ricca di frutta secca, cioccolato e spezie, perfetta per le feste o una merenda speciale.',
-        immagine: '/images/torta_paesana.jpeg',
-        tags: ['dolce', 'tradizione', 'rustica']
-    }
-];
-
+let posts = require('../data/posts.js')
 
 //home
 router.get('/', (req, res) => {
@@ -47,12 +8,17 @@ router.get('/', (req, res) => {
 })
 
 //index
-router.get('/', (req, res) => {
-    res.json(posts)
+router.get('/api/posts/', (req, res) => {
+    let filterPosts = posts
+    const { tags } = req.query;
+    if (req.query.tags) {
+        filterPosts = filterPosts.filter(post => post.tags.includes(req.query.tags))
+    }
+    res.json(filterPosts)
 })
 
 //show (S)
-router.get('/:id', (req, res) => {
+router.get('/api/posts/:id', (req, res) => {
     const { id } = req.params
     const post = posts.find(item => item.id === parseInt(id))
 
@@ -68,7 +34,7 @@ router.get('/:id', (req, res) => {
 })
 
 //create
-router.post('/', (req, res) => {
+router.post('/api/posts/', (req, res) => {
     const { titolo, contenuto, immagine, tags } = req.body
     const newPost = {
         id: Math.max(...posts.map(post => post.id)) + 1,
@@ -82,7 +48,7 @@ router.post('/', (req, res) => {
 })
 
 //update
-router.put('/:id', (req, res) => {
+router.put('/api/posts/:id', (req, res) => {
     const { id } = req.params
     let post = posts.find(item => item.id === parseInt(id))
     let { titolo, contenuto, immagine, tags } = req.body || {}
@@ -103,7 +69,7 @@ router.put('/:id', (req, res) => {
 })
 
 //modify
-router.patch('/:id', (req, res) => {
+router.patch('/api/posts/:id', (req, res) => {
     const { id } = req.params
     const keyChanger = (post, value, keyName) => {
         if (value !== undefined) {
@@ -129,7 +95,7 @@ router.patch('/:id', (req, res) => {
 })
 
 //destroy
-router.delete('/:id', (req, res) => {
+router.delete('/api/posts/:id', (req, res) => {
     const id = parseInt(req.params.id)
     const postsLenght = posts.length
     posts = posts.filter(item => item.id !== id)
